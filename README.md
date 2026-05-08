@@ -25,8 +25,8 @@ Uma aplicação web para rastreamento financeiro pessoal, construída com React,
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/lenaalves/lenaalves.git
-   cd fintrack
+   git clone https://github.com/lenaalves/Projeto-Fintrack.git
+   cd Projeto-Fintrack
    ```
 
 2. Instale as dependências:
@@ -52,7 +52,7 @@ Uma aplicação web para rastreamento financeiro pessoal, construída com React,
 ## 📁 Estrutura do Projeto
 
 ```
-fintrack/
+Projeto-Fintrack/
 ├── public/          # Assets estáticos
 ├── src/
 │   ├── assets/      # Imagens e ícones
