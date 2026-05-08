@@ -67,6 +67,10 @@ Projeto-Fintrack/
 └── README.md
 ```
 
+## 📊 Estatísticas do GitHub
+
+![GitHub stats](https://github-readme-stats.vercel.app/api?username=lenaalves&show_icons=true&theme=radical)
+
 ## 🤝 Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
