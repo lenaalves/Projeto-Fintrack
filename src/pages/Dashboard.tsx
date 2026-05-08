@@ -126,12 +126,12 @@ export default function Dashboard({ userEmail }: Props) {
             <h2 className="font-semibold text-gray-700 mb-4">Despesas por categoria</h2>
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
-                <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}>
                   {pieData.map((_, i) => (
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(v: number) => `R$ ${v.toFixed(2)}`} />
+                  <Tooltip formatter={(value) => `R$ ${Number(value ?? 0).toFixed(2)}`} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -145,7 +145,7 @@ export default function Dashboard({ userEmail }: Props) {
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="name" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip formatter={(v: number) => `R$ ${v.toFixed(2)}`} />
+              <Tooltip formatter={(v: unknown) => `R$ ${Number(v).toFixed(2)}`} />
               <Legend />
               <Bar dataKey="Receitas" fill="#22c55e" radius={[4, 4, 0, 0]} />
               <Bar dataKey="Despesas" fill="#ef4444" radius={[4, 4, 0, 0]} />
