@@ -84,63 +84,60 @@ export default function Dashboard({ userEmail }: Props) {
     { id: 'add', icon: '➕', label: 'Adicionar' },
   ]
 
-  return (
-    <div style={{ fontFamily: "'Nunito', sans-serif" }} className="flex min-h-screen w-full bg-rose-50">
+return (
+  <div style={{ fontFamily: "'Nunito', sans-serif" }} className="flex min-h-screen w-full bg-rose-50">
 
-      {/* Sidebar */}
-      <aside className="w-56 min-w-[14rem] bg-white flex flex-col py-8 px-4 shadow-sm border-r border-rose-100 sticky top-0 h-screen">
-        <div className="mb-10 px-2">
-          <h1 className="text-xl font-extrabold text-violet-400">💸 FinTrack</h1>
-          <p className="text-xs text-gray-400 mt-1">controle financeiro</p>
-        </div>
+    {/* Sidebar — só aparece em telas grandes */}
+    <aside className="hidden md:flex w-56 min-w-[14rem] bg-white flex-col py-8 px-4 shadow-sm border-r border-rose-100 sticky top-0 h-screen">
+      <div className="mb-10 px-2">
+        <h1 className="text-xl font-extrabold text-violet-400">💸 FinTrack</h1>
+        <p className="text-xs text-gray-400 mt-1">controle financeiro</p>
+      </div>
+      <nav className="flex flex-col gap-2 flex-1">
+        {navItems.map(item => (
+          <button
+            key={item.id}
+            onClick={() => setPage(item.id)}
+            className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all ${
+              page === item.id
+                ? 'bg-violet-100 text-violet-600'
+                : 'text-gray-400 hover:bg-rose-50 hover:text-rose-400'
+            }`}
+          >
+            <span className="text-base">{item.icon}</span>
+            {item.label}
+          </button>
+        ))}
+      </nav>
+      <button
+        onClick={() => supabase.auth.signOut()}
+        className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-gray-400 hover:bg-red-50 hover:text-red-400 transition-all"
+      >
+        <span>🚪</span> Sair
+      </button>
+    </aside>
 
-        <nav className="flex flex-col gap-2 flex-1">
-          {navItems.map(item => (
-            <button
-              key={item.id}
-              onClick={() => setPage(item.id)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all ${
-                page === item.id
-                  ? 'bg-violet-100 text-violet-600'
-                  : 'text-gray-400 hover:bg-rose-50 hover:text-rose-400'
-              }`}
-            >
-              <span className="text-base">{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
-        </nav>
-
-        <button
-          onClick={() => supabase.auth.signOut()}
-          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-gray-400 hover:bg-red-50 hover:text-red-400 transition-all"
-        >
-          <span>🚪</span> Sair
-        </button>
-      </aside>
-
-      {/* Main */}
-      <main className="flex-1 p-8 overflow-x-hidden">
+    {/* Main */}
+    <main className="flex-1 p-4 md:p-8 overflow-x-hidden pb-24 md:pb-8">
+      <div className="max-w-5xl mx-auto flex flex-col gap-6">
 
         {/* Header */}
-<div className="flex justify-between items-center mb-6">
-  <div>
-    <h2 className="text-2xl font-extrabold text-gray-700">
-      {page === 'dashboard' && `Olá, ${firstName} 👋`}
-      {page === 'transactions' && 'Suas transações 📋'}
-      {page === 'add' && 'Nova transação ✨'}
-    </h2>
-    <p className="text-sm text-gray-400 mt-1">
-      {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
-    </p>
-  </div>
-</div>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-xl md:text-2xl font-extrabold text-gray-700">
+              {page === 'dashboard' && `Olá, ${firstName} 👋`}
+              {page === 'transactions' && 'Suas transações 📋'}
+              {page === 'add' && 'Nova transação ✨'}
+            </h2>
+            <p className="text-sm text-gray-400 mt-1">
+              {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+            </p>
+          </div>
+        </div>
 
         {/* DASHBOARD PAGE */}
         {page === 'dashboard' && (
           <div className="flex flex-col gap-6">
-
-            {/* Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-violet-100">
                 <div className="flex items-center gap-3 mb-3">
@@ -167,26 +164,24 @@ export default function Dashboard({ userEmail }: Props) {
               </div>
             </div>
 
-            {/* Gráficos */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {pieData.length > 0 && (
                 <div className="bg-white rounded-3xl p-6 shadow-sm border border-rose-100">
                   <h3 className="font-extrabold text-gray-600 mb-4">Despesas por categoria</h3>
-<ResponsiveContainer width="100%" height={280}>
-  <PieChart>
-    <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={110}>
-                    {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                    </Pie>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <PieChart>
+                      <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={110}>
+                        {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                      </Pie>
                       <Tooltip formatter={(v: unknown) => `R$ ${Number(v).toFixed(2)}`} />
-                        <Legend />
+                      <Legend />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
               )}
-
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-rose-100">
                 <h3 className="font-extrabold text-gray-600 mb-4">Evolução mensal</h3>
-                <ResponsiveContainer width="100%" height={220}>
+                <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={barData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#fef0f0" />
                     <XAxis dataKey="name" tick={{ fontSize: 11, fontFamily: 'Nunito' }} />
@@ -200,7 +195,6 @@ export default function Dashboard({ userEmail }: Props) {
               </div>
             </div>
 
-            {/* Últimas transações */}
             <div className="bg-white rounded-3xl p-6 shadow-sm border border-rose-100">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-extrabold text-gray-600">Últimas transações</h3>
@@ -274,7 +268,7 @@ export default function Dashboard({ userEmail }: Props) {
 
         {/* ADD PAGE */}
         {page === 'add' && (
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-rose-100 max-w-md">
+          <div className="bg-white rounded-3xl p-8 shadow-sm border border-rose-100 max-w-md mx-auto w-full">
             <div className="flex gap-2 mb-6">
               <button
                 onClick={() => { setType('expense'); setCategory('') }}
@@ -289,47 +283,52 @@ export default function Dashboard({ userEmail }: Props) {
                 💰 Receita
               </button>
             </div>
-
             <div className="flex flex-col gap-3">
-              <input
-                type="number"
-                placeholder="Valor (R$)"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="border-2 border-rose-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-violet-300 transition"
-              />
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="border-2 border-rose-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-violet-300 transition text-gray-500"
-              >
+              <input type="number" placeholder="Valor (R$)" value={amount} onChange={(e) => setAmount(e.target.value)}
+                className="border-2 border-rose-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-violet-300 transition" />
+              <select value={category} onChange={(e) => setCategory(e.target.value)}
+                className="border-2 border-rose-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-violet-300 transition text-gray-500">
                 <option value="">Selecione uma categoria</option>
                 {categories.map(c => <option key={c} value={c}>{CATEGORY_EMOJI[c]} {c}</option>)}
               </select>
-              <input
-                type="text"
-                placeholder="Descrição (opcional)"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="border-2 border-rose-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-violet-300 transition"
-              />
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="border-2 border-rose-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-violet-300 transition"
-              />
-              <button
-                onClick={handleAdd}
-                disabled={submitting}
-                className="bg-violet-300 hover:bg-violet-400 text-white font-extrabold py-4 rounded-2xl transition disabled:opacity-50 mt-2"
-              >
+              <input type="text" placeholder="Descrição (opcional)" value={description} onChange={(e) => setDescription(e.target.value)}
+                className="border-2 border-rose-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-violet-300 transition" />
+              <input type="date" value={date} onChange={(e) => setDate(e.target.value)}
+                className="border-2 border-rose-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-violet-300 transition" />
+              <button onClick={handleAdd} disabled={submitting}
+                className="bg-violet-300 hover:bg-violet-400 text-white font-extrabold py-4 rounded-2xl transition disabled:opacity-50 mt-2">
                 {submitting ? 'Salvando...' : '✨ Adicionar transação'}
               </button>
             </div>
           </div>
         )}
-      </main>
-    </div>
-  )
+
+      </div>
+    </main>
+
+    {/* Bottom nav — só aparece no mobile */}
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-rose-100 flex justify-around py-3 z-50">
+      {navItems.map(item => (
+        <button
+          key={item.id}
+          onClick={() => setPage(item.id)}
+          className={`flex flex-col items-center gap-1 px-4 transition-all ${
+            page === item.id ? 'text-violet-500' : 'text-gray-400'
+          }`}
+        >
+          <span className="text-xl">{item.icon}</span>
+          <span className="text-xs font-bold">{item.label}</span>
+        </button>
+      ))}
+      <button
+        onClick={() => supabase.auth.signOut()}
+        className="flex flex-col items-center gap-1 px-4 text-gray-400"
+      >
+        <span className="text-xl">🚪</span>
+        <span className="text-xs font-bold">Sair</span>
+      </button>
+    </nav>
+
+  </div>
+)
 }
